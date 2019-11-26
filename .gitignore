@@ -1,0 +1,6 @@
+
+notebooks/*
+.ipynb_checkpoints
+.python-version
+Pipfile
+Pipfile.lock
