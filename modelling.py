@@ -1,6 +1,7 @@
 from sklearn.metrics import confusion_matrix, classification_report
 from evaluation import plot_confusion_matrix
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 def perform_model(model, X_train, y_train, X_test, y_test, class_labels, cm_normalize=True, \
                  print_cm=True, cm_cmap=plt.cm.Greens):
