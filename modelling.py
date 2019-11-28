@@ -1,4 +1,4 @@
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score, precision_score, recall_score, f1_score
 from evaluation import plot_confusion_matrix
 from datetime import datetime
 import matplotlib.pyplot as plt
