@@ -45,7 +45,7 @@ def get_random_score(data_values, data_labels):
     score=f1_score(y_pred_random,data_labels,average='micro')
     print('F1 Score of random model on CV data is:',score)
 
-def plot_params(x_label, results, scoring):
+def plot_params(x_label, param_values, results, scoring, y_low_bound, y_high_bound):
     
     plt.figure(figsize=(13, 13))
     plt.title("GridSearchCV evaluating using multiple scorers simultaneously",
@@ -56,10 +56,10 @@ def plot_params(x_label, results, scoring):
 
     ax = plt.gca()
 #     ax.set_xlim(0, 20)
-#     ax.set_ylim(0.5, 0.7)
+    ax.set_ylim(y_low_bound, y_high_bound)
 
     # Get the regular numpy array from the MaskedArray
-    X_axis = np.array(results.data, dtype=float)
+    X_axis = np.array(param_values.data, dtype=float)
     
     for scorer, color in zip(sorted(scoring), ['g', 'k']):
         for sample, style in (('train', '--'), ('test', '-')):
