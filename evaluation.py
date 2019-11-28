@@ -2,6 +2,7 @@ from sklearn.metrics import confusion_matrix, f1_score
 import matplotlib.pyplot as plt
 import random
 import numpy as np
+import itertools
 
 
 def plot_confusion_matrix(cm, classes,
