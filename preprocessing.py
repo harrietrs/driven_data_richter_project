@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import Normalizer, OneHotEncoder
+
+
 def resample(train_data, sample_size=25000):
     # resampling
     train_high=train_data[train_data.damage_grade==3]
@@ -23,6 +25,7 @@ def resample(train_data, sample_size=25000):
     train = pd.concat([train_high, train_medium,train_low], ignore_index=True, sort =False)
     
     return train
+
     
 def train_test_split_function(train_x, train_y, stratify=False):
     if stratify:
@@ -33,6 +36,7 @@ def train_test_split_function(train_x, train_y, stratify=False):
         x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=0.2)
     return x_train, x_test, x_cv, y_train, y_test, y_cv
 
+
 def normalize_numerical_data(train_data,cv_data,test_data, normalizer=Normalizer()):
     std=normalizer
     std.fit(train_data)
@@ -40,6 +44,7 @@ def normalize_numerical_data(train_data,cv_data,test_data, normalizer=Normalizer
     transformed_cv=std.transform(cv_data)
     transformed_test=std.transform(test_data)
     return transformed_input,transformed_cv,transformed_test
+
 
 def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding=OneHotEncoder()):
     std=std_encoding
