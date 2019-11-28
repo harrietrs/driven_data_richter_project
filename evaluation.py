@@ -45,7 +45,7 @@ def get_random_score(data_values, data_labels):
     score=f1_score(y_pred_random,data_labels,average='micro')
     print('F1 Score of random model on CV data is:',score)
 
-def plot_params(x_label, results):
+def plot_params(x_label, results, scoring):
     
     plt.figure(figsize=(13, 13))
     plt.title("GridSearchCV evaluating using multiple scorers simultaneously",
