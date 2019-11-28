@@ -34,7 +34,7 @@ def perform_model(model, X_train, y_train, X_test, y_test, class_labels, cm_norm
     precision=precision_score(y_true=y_test, y_pred=y_pred,average='weighted')
     recall=recall_score(y_true=y_test, y_pred=y_pred,average='weighted')
     weighted_f1=f1_score(y_true=y_test, y_pred=y_pred,average='weighted')
-    print('\n Weighted F1:{}'.format(micro_f1))
+    print('\n Weighted F1:{}'.format(weighted_f1))
     print('\n Precision:{}'.format(precision))
     print('\n Recall:{}'.format(recall))
     print('\n Accuracy:{}\n'.format(accuracy))
