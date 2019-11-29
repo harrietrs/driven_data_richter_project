@@ -64,3 +64,19 @@ def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding
     cv_data = pd.DataFrame(data=std_cv.todense(), columns=col_name_list)
 
     return train_data,cv_data,test_data
+
+
+def get_polynomials(data, degree=2, feats_for_poly = ['age','area_percentage','height_percentage','count_floors_pre_eq','count_families',
+                    'floors_per_area', 'floors_per_height', 'families_per_floor', 'families_per_area',
+                    'families_per_height']):
+    
+    
+    poly = PolynomialFeatures(degree)
+    polynomial_feats = poly.fit_transform(data[feats_for_poly])
+    polynomial_features_df = pd.DataFrame(data=polynomial_feats,columns=poly.get_feature_names(feats_for_poly),dtype='int64')
+    polynomial_features_df.drop('1',axis=1,inplace=True)
+    polynomial_features_df.drop(feats_for_poly,axis=1,inplace=True)
+    
+    data_with_polynomial_features = pd.concat([data, polynomial_features_df], axis=1)
+    
+    return data_with_polynomial_features
