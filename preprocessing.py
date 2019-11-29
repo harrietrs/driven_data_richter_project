@@ -66,7 +66,7 @@ def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding
     return train_data,cv_data,test_data
 
 
-def get_polynomials(data, degree=2, feats_for_poly = ['age','area_percentage','height_percentage','count_floors_pre_eq','count_families',
+def add_polynomials(data, degree=2, feats_for_poly = ['age','area_percentage','height_percentage','count_floors_pre_eq','count_families',
                     'floors_per_area', 'floors_per_height', 'families_per_floor', 'families_per_area',
                     'families_per_height']):
     
@@ -80,3 +80,10 @@ def get_polynomials(data, degree=2, feats_for_poly = ['age','area_percentage','h
     data_with_polynomial_features = pd.concat([data, polynomial_features_df], axis=1)
     
     return data_with_polynomial_features
+
+def drop_sparse_features(data, threshold=0.9999):
+    num_zeros = (((data == 0).sum())/data.shape[0]).sort_values(ascending=False)
+    zero_cols_to_drop = list(num_zeros[num_zeros>threshold].index)
+    print("{} columns dropped".format(str(len(ero_cols_to_drop))))
+    trimmed_data = data.drop(columns=zero_cols_to_drop)
+    return trimmed_data
