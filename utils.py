@@ -39,5 +39,5 @@ def get_data(train_values, test_values, train_labels):
     train_ids= full_training_data.pop('building_id')
     test_ids = test_data.pop('building_id')
     
-    return full_training_data, test_data
+    return full_training_data, test_data, train_ids, test_ids
     
