@@ -40,4 +40,10 @@ def get_data(train_values, test_values, train_labels):
     test_ids = test_data.pop('building_id')
     
     return full_training_data, test_data, train_ids, test_ids
+
+def export_test_data(test_ids, pred_data, file_path):
     
+    test_output = pd.concat([test_ids,pd.Series(pred_data)], axis=1)
+    test_output.columns = ['building_id','damage_grade']
+    
+    test_output.to_csv(file_path,header=True, index=False)
