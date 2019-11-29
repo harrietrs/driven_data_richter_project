@@ -47,6 +47,9 @@ def normalize_numerical_data(train_data,cv_data,test_data, normalizer=Normalizer
 
 
 def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding=OneHotEncoder()):
+    train_data = train_data.astype('str')
+    cv_data = cv_data.astype('str')
+    test_data = test_data.astype('str')
     std=std_encoding
     std.fit(train_data)
     std_train=std.transform(train_data)
