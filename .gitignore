@@ -5,3 +5,4 @@ notebooks/*
 Pipfile
 Pipfile.lock
 token.yml
+outputs/
