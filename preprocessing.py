@@ -58,9 +58,12 @@ def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding
     final_train, final_test = train_data.align(test_data,
                                                                     join='left', 
                                                                     axis=1)
+    
+    final_test = final_test.fillna(0)
     final_train, final_cv = final_train.align(cv_data,
                                                                     join='left', 
                                                                     axis=1)
+    final_cv = final_cv.fillna(0)
 
     
     return final_train,final_cv,final_test
