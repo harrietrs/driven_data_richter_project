@@ -50,23 +50,20 @@ def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding
     train_data = train_data.astype('category')
     cv_data = cv_data.astype('category')
     test_data = test_data.astype('category')
-    std=std_encoding
-    std.fit(train_data)
-    std_train=std.transform(train_data)
-    std_test=std.transform(test_data)
-    std_cv=std.transform(cv_data)
     
-    encoder_labels = dict(zip(list(train_data.columns), [category.tolist() for category in std.categories_]))
-    col_name_list = []
-    for key, value in encoder_labels.items():
-        for label in value:
-            col_name_list.append(key + '_' + label)
-        
-    train_data= pd.DataFrame(data=std_train.todense(), columns=col_name_list)
-    test_data = pd.DataFrame(data=std_test.todense(), columns=col_name_list)
-    cv_data = pd.DataFrame(data=std_cv.todense(), columns=col_name_list)
+    train_data = pd.get_dummies(train_data)
+    cv_data = pd.get_dummies(cv_data)
+    test_data = pd.get_dummies(test_data)
+    
+    final_train, final_test = train_data.align(test_data,
+                                                                    join='left', 
+                                                                    axis=1)
+    final_train, final_cv = final_train.align(cv_data,
+                                                                    join='left', 
+                                                                    axis=1)
 
-    return train_data,cv_data,test_data
+    
+    return final_train,final_cv,final_test
 
 
 def add_polynomials(data, degree=2, feats_for_poly = ['age','area_percentage','height_percentage','count_floors_pre_eq','count_families',
