@@ -27,43 +27,44 @@ def resample(train_data, sample_size=25000):
     return train
 
     
-def train_test_split_function(train_x, train_y, test_set=None, stratify=False):
-    if test_set is None:
-        if stratify:
-            x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=train_y,test_size=0.2)
-            x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=0.2)
-        else:
-            x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=None,test_size=0.2)
-            x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=0.2)
+def train_test_split_function(train_x, train_y, stratify=False):
+    if stratify:
+        x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=train_y,test_size=0.2)
+        x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=0.2)
     else:
-        if stratify:
-            x_train,x_cv,y_train,y_cv=train_test_split(train_x,train_y,stratify=train_y,test_size=0.2)
-        else:
-            x_train,x_cv,y_train,y_cv=train_test_split(train_x,train_y,stratify=None,test_size=0.2)
-        x_test=test_set
-        y_test = None
+        x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=None,test_size=0.2)
+        x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=0.2)
+
     return x_train, x_test, x_cv, y_train, y_test, y_cv
 
 
-def normalize_numerical_data(train_data,cv_data,test_data, normalizer=Normalizer()):
+def normalize_numerical_data(train_data,cv_data,test_data, real_test_data, normalizer=Normalizer()):
     std=normalizer
     std.fit(train_data)
     transformed_input=std.transform(train_data)
     transformed_cv=std.transform(cv_data)
     transformed_test=std.transform(test_data)
-    return transformed_input,transformed_cv,transformed_test
+    transformed_real_test_data=std.transform(real_test_data)
+    return transformed_input,transformed_cv,transformed_test, transformed_real_test_data
 
 
-def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding=OneHotEncoder()):
+def one_hot_encoding_categorical_data(train_data,cv_data,test_data, real_test_data, std_encoding=OneHotEncoder()):
     train_data = train_data.astype('category')
     cv_data = cv_data.astype('category')
     test_data = test_data.astype('category')
+    real_test_data = real_test_data.astype('category')
     
     train_data = pd.get_dummies(train_data)
     cv_data = pd.get_dummies(cv_data)
     test_data = pd.get_dummies(test_data)
+    real_test_data = pd.get_dummies(real_test_data)
     
-    final_train, final_test = train_data.align(test_data,
+    final_train, final_real_test = train_data.align(real_test_data,
+                                                                    join='left', 
+                                                                    axis=1)
+    final_real_test = final_real_test.fillna(0)
+    
+    final_train, final_test = final_train.align(test_data,
                                                                     join='left', 
                                                                     axis=1)
     
@@ -74,7 +75,7 @@ def one_hot_encoding_categorical_data(train_data,cv_data,test_data, std_encoding
     final_cv = final_cv.fillna(0)
 
     
-    return final_train,final_cv,final_test
+    return final_train,final_cv,final_test, final_real_test
 
 
 def add_polynomials(data, degree=2, feats_for_poly = ['age','area_percentage','height_percentage','count_floors_pre_eq','count_families',
