@@ -27,25 +27,23 @@ def resample(train_data, sample_size=25000):
     return train
 
 
-def get_new_features(train_data, cv_data, test_data, unlabelled_data):
+def get_new_features(train_data, test_data):
     
     train_data = make_new_features(train_data)
-    cv_data = make_new_features(cv_data)
     test_data = make_new_features(test_data)
-    unlabelled_data = make_new_features(unlabelled_data)
     
-    return train_data, cv_data, test_data, unlabelled_data
+    return train_data, test_data
     
     
     
 
 def make_new_features(data):
     
-    data['floors_per_area'] = data.count_floors_pre_eq/data.area_percentage
-    data['floors_per_height'] = data.count_floors_pre_eq/data.height_percentage
-    data['families_per_floor'] = data.count_families/data.count_floors_pre_eq
-    data['families_per_area'] = data.count_families/data.area_percentage
-    data['families_per_height'] = data.count_families/data.height_percentage
+    data['floors_per_area'] = (data.count_floors_pre_eq/data.area_percentage).copy()
+    data['floors_per_height'] = (data.count_floors_pre_eq/data.height_percentage).copy()
+    data['families_per_floor'] = (data.count_families/data.count_floors_pre_eq).copy()
+    data['families_per_area'] = (data.count_families/data.area_percentage).copy()
+    data['families_per_height'] = (data.count_families/data.height_percentage).copy()
     
     return data
 
