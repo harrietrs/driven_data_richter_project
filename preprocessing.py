@@ -27,13 +27,13 @@ def resample(train_data, sample_size=25000):
     return train
 
     
-def train_test_split_function(train_x, train_y, stratify=False):
+def train_test_split_function(train_x, train_y, split=0.2, stratify=False):
     if stratify:
-        x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=train_y,test_size=0.2)
-        x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=0.2)
+        x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=train_y,test_size=split)
+        x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=split)
     else:
-        x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=None,test_size=0.2)
-        x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=0.2)
+        x_train,x_test,y_train,y_test=train_test_split(train_x,train_y,stratify=None,test_size=split)
+        x_train,x_cv,y_train,y_cv=train_test_split(x_train,y_train,stratify=y_train,test_size=split)
 
     return x_train, x_test, x_cv, y_train, y_test, y_cv
 
