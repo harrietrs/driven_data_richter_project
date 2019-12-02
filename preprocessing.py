@@ -26,6 +26,29 @@ def resample(train_data, sample_size=25000):
     
     return train
 
+
+def get_new_features(train_data, cv_data, test_data, unlabelled_data):
+    
+    train_data = make_new_features(train_data)
+    cv_data = make_new_features(cv_data)
+    test_data = make_new_features(test_data)
+    unlabelled_data = make_new_features(unlabelled_data)
+    
+    return train_data, cv_data, test_data, unlabelled_data
+    
+    
+    
+
+def make_new_features(data):
+    
+    data['floors_per_area'] = data.count_floors_pre_eq/data.area_percentage
+    data['floors_per_height'] = data.count_floors_pre_eq/data.height_percentage
+    data['families_per_floor'] = data.count_families/data.count_floors_pre_eq
+    data['families_per_area'] = data.count_families/data.area_percentage
+    data['families_per_height'] = data.count_families/data.height_percentage
+    
+    return data
+
     
 def train_test_split_function(train_x, train_y, split=0.2, stratify=False):
     if stratify:
@@ -38,31 +61,31 @@ def train_test_split_function(train_x, train_y, split=0.2, stratify=False):
     return x_train, x_test, x_cv, y_train, y_test, y_cv
 
 
-def normalize_numerical_data(train_data,cv_data,test_data, real_test_data, normalizer=Normalizer()):
+def normalize_numerical_data(train_data,cv_data,test_data, unlabelled_data, normalizer=Normalizer()):
     std=normalizer
     std.fit(train_data)
     transformed_input=std.transform(train_data)
     transformed_cv=std.transform(cv_data)
     transformed_test=std.transform(test_data)
-    transformed_real_test_data=std.transform(real_test_data)
-    return transformed_input,transformed_cv,transformed_test, transformed_real_test_data
+    transformed_unlabelled_data=std.transform(unlabelled_data)
+    return transformed_input,transformed_cv,transformed_test, transformed_unlabelled_data
 
 
-def one_hot_encoding_categorical_data(train_data,cv_data,test_data, real_test_data, std_encoding=OneHotEncoder()):
+def one_hot_encoding_categorical_data(train_data,cv_data,test_data, unlabelled_data, std_encoding=OneHotEncoder()):
     train_data = train_data.astype('category')
     cv_data = cv_data.astype('category')
     test_data = test_data.astype('category')
-    real_test_data = real_test_data.astype('category')
+    unlabelled_data = unlabelled_data.astype('category')
     
     train_data = pd.get_dummies(train_data)
     cv_data = pd.get_dummies(cv_data)
     test_data = pd.get_dummies(test_data)
-    real_test_data = pd.get_dummies(real_test_data)
+    unlabelled_data = pd.get_dummies(unlabelled_data)
     
-    final_train, final_real_test = train_data.align(real_test_data,
+    final_train, final_unlabelled = train_data.align(unlabelled_data,
                                                                     join='left', 
                                                                     axis=1)
-    final_real_test = final_real_test.fillna(0)
+    final_unlabelled = final_unlabelled.fillna(0)
     
     final_train, final_test = final_train.align(test_data,
                                                                     join='left', 
@@ -75,7 +98,7 @@ def one_hot_encoding_categorical_data(train_data,cv_data,test_data, real_test_da
     final_cv = final_cv.fillna(0)
 
     
-    return final_train,final_cv,final_test, final_real_test
+    return final_train,final_cv,final_test, final_unlabelled
 
 
 def add_polynomials(data, degree=2, feats_for_poly = ['age','area_percentage','height_percentage','count_floors_pre_eq','count_families',
